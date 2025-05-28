@@ -31,45 +31,81 @@ const ItemList: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    fetch("/api/formulas", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        page: currentPage,
-        limit: 500,
-      }),
-    })
-      .then((res) => res.json())
-      .then(async (data) => {
-        console.log("Fetched data:", data);
-        const mapped = await Promise.all(
-          data.data.map(async (item: ItemType) => {
-            let favicon = "";
-            if (item.homepage) {
-              try {
-                const url = new URL(item.homepage);
-                favicon = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=64`;
-              } catch {
-                favicon = "";
+    setLoading(true);
+
+    /**
+     * Fetches a paginated list of formulas from the `/api/formulas` endpoint using a POST request.
+     * Maps the received data to the `MappedItemType` structure, including generating a favicon URL
+     * from the item's homepage if available. Updates the component state with the mapped items,
+     * current page, and total pages. Handles errors by logging them and resetting the items list.
+     * Sets the loading state to false when the operation completes.
+     *
+     * @async
+     * @function fetchData
+     * @returns {Promise<void>} A promise that resolves when the data fetching and state updates are complete.
+     */
+    const fetchData = async () => {
+      try {
+        // Prepare the POST request options
+        const requestInit: RequestInit = {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ page: currentPage, limit: 500 }),
+        };
+
+        // Fetch data from the API
+        const res = await fetch(`/api/formulas`, requestInit);
+
+        // Throw error if response is not OK
+        if (!res.ok) {
+          throw new Error(`Failed to fetch: ${res.status}`);
+        }
+
+        // Parse the JSON response
+        const data = await res.json();
+
+        // Map the API data to the MappedItemType structure
+        const mapped: MappedItemType[] = Array.isArray(data.data)
+          ? data.data.map((item: ItemType) => {
+              let favicon: string | undefined;
+              // Try to generate a favicon URL from the homepage
+              if (item.homepage) {
+                try {
+                  const url = new URL(item.homepage);
+                  favicon = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=64`;
+                } catch {
+                  favicon = undefined;
+                }
               }
-            }
-            return {
-              id: uuidv4(),
-              title: item.full_name,
-              description: item.desc,
-              image: favicon,
-              href: `/formula/${item.name}`,
-              verified: !item.deprecated && !item.disabled,
-            };
-          })
-        );
+              return {
+                id: uuidv4(),
+                title: item.full_name || item.name,
+                description: item.desc || "",
+                image: favicon,
+                href: `/formula/${encodeURIComponent(item.name)}`,
+                verified: Boolean(!item.deprecated && !item.disabled),
+              };
+            })
+          : [];
+
+        // Update state with the mapped items and pagination info
+        setItems(mapped);
         setCurrentPage(data.page);
         setTotalPages(data.pages);
-        setItems(mapped);
+      } catch (error) {
+        // Log and handle errors
+        console.error("Error fetching data:", error);
+        setItems([]);
+      } finally {
+        // Always set loading to false at the end
         setLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, [currentPage]);
 
   return (
