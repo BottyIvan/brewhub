@@ -41,19 +41,18 @@ export default function FormulaDetail({ formulaName }: Props) {
   // Fetch formula details when the component mounts or formulaName changes
   useEffect(() => {
     /**
-     * Fetches the formula data for the specified formula name from the API.
+     * Fetches formula details from the API for the given formula name.
      *
-     * This asynchronous function calls the `/api/formula/{formulaName}` endpoint,
-     * parses the response as JSON, updates the component state with the fetched data,
-     * and sets the loading state to false upon completion.
+     * This async function requests `/api/formula/{formulaName}`, parses the JSON response,
+     * generates a favicon URL from the homepage (if available), and updates the component state.
+     * Sets loading to false when done.
      *
-     * @async
-     * @returns {Promise<void>} A promise that resolves when the formula data has been fetched and state updated.
+     * @returns {Promise<void>} Resolves when the formula data is fetched and state is updated.
      */
     const fetchFormula = async () => {
       const res = await fetch(`/api/formula/${formulaName}`);
       const data = await res.json();
-      // Try to generate a favicon URL from the homepage
+      // Generate favicon URL from homepage if possible
       let favicon: string | undefined;
       if (data.homepage) {
         try {
@@ -63,7 +62,6 @@ export default function FormulaDetail({ formulaName }: Props) {
           favicon = undefined;
         }
       }
-      // Attach favicon to the data object (if you want to use it elsewhere)
       setFormula({ ...data, image: favicon });
       setLoading(false);
     };
