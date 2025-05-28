@@ -186,6 +186,26 @@ export default function FormulaDetail({ formulaName }: Props) {
               <p>{formula.desc}</p>
             </div>
           </section>
+          <section className="rounded-xl shadow-md dark:bg-gray-800 bg-white p-6">
+            <h2 className="mb-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
+              Install Command
+            </h2>
+            <div className="flex items-center gap-2">
+              <code className="bg-gray-100 dark:bg-gray-900 px-3 py-1 rounded font-mono text-sm text-gray-800 dark:text-gray-200">
+                brew install {formula.name}
+              </code>
+              <button
+                type="button"
+                className="ml-2 px-2 py-1 rounded bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition"
+                onClick={() => {
+                  navigator.clipboard.writeText(`brew install ${formula.name}`);
+                }}
+                title="Copy to clipboard"
+              >
+                Copy
+              </button>
+            </div>
+          </section>
           <section className="rounded-xl shadow-md dark:bg-gray-800 bg-white p-6 flex flex-col gap-3">
             <div className="flex flex-wrap gap-4">
               <div className="flex flex-col">
