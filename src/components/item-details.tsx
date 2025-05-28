@@ -155,36 +155,50 @@ export default function FormulaDetail({ formulaName }: Props) {
           </div>
         </header>
         <div className="flex flex-col gap-6 col-span-1">
-          <section className="rounded-xl shadow-md dark:bg-gray-800 p-6 bg-transparent">
-            <h2 className="mb-2 text-xl font-semibold">Description</h2>
-            <div className="prose dark:prose-invert xl:max-w-[75%]">
+          <section className="rounded-xl shadow-md dark:bg-gray-800 bg-white p-6">
+            <h2 className="mb-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
+              Description
+            </h2>
+            <div className="prose dark:prose-invert xl:max-w-[75%] text-gray-800 dark:text-gray-200">
               <p>{formula.desc}</p>
             </div>
           </section>
-          <section className="rounded-xl shadow-md dark:bg-gray-800 p-6 flex flex-col gap-3 bg-transparent">
+          <section className="rounded-xl shadow-md dark:bg-gray-800 bg-white p-6 flex flex-col gap-3">
             <div className="flex flex-wrap gap-4">
               <div className="flex flex-col">
-                <span className="text-xs text-gray-500">Stable version</span>
-                <span className="font-bold">{formula.versions.stable}</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Stable version
+                </span>
+                <span className="font-bold text-gray-900 dark:text-gray-100">
+                  {formula.versions.stable}
+                </span>
               </div>
               {formula.versions.head && (
                 <div className="flex flex-col">
-                  <span className="text-xs text-gray-500">Head version</span>
-                  <span className="font-bold">{formula.versions.head}</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    Head version
+                  </span>
+                  <span className="font-bold text-gray-900 dark:text-gray-100">
+                    {formula.versions.head}
+                  </span>
                 </div>
               )}
               {formula.installed && formula.installed.length > 0 && (
                 <div className="flex flex-col">
-                  <span className="text-xs text-gray-500">Installed</span>
-                  <span className="font-bold">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    Installed
+                  </span>
+                  <span className="font-bold text-gray-900 dark:text-gray-100">
                     {formula.installed.map((i) => i.version).join(", ")}
                   </span>
                 </div>
               )}
               {formula.urls?.stable?.checksum && (
                 <div className="flex flex-col">
-                  <span className="text-xs text-gray-500">Checksum</span>
-                  <span className="font-mono">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    Checksum
+                  </span>
+                  <span className="font-mono text-gray-800 dark:text-gray-200">
                     {formula.urls.stable.checksum}
                   </span>
                 </div>
@@ -192,12 +206,14 @@ export default function FormulaDetail({ formulaName }: Props) {
             </div>
             {formula.dependencies && formula.dependencies.length > 0 && (
               <div>
-                <span className="text-xs text-gray-500">Dependencies</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Dependencies
+                </span>
                 <div className="flex flex-wrap gap-2 mt-1">
                   {formula.dependencies.map((dep) => (
                     <span
                       key={dep}
-                      className="px-2 py-0.5 rounded bg-blue-100 text-xs font-medium"
+                      className="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900 text-xs font-medium text-blue-800 dark:text-blue-200"
                     >
                       {dep}
                     </span>
@@ -208,14 +224,14 @@ export default function FormulaDetail({ formulaName }: Props) {
             {formula.build_dependencies &&
               formula.build_dependencies.length > 0 && (
                 <div>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
                     Build dependencies
                   </span>
                   <div className="flex flex-wrap gap-2 mt-1">
                     {formula.build_dependencies.map((dep) => (
                       <span
                         key={dep}
-                        className="px-2 py-0.5 rounded bg-purple-100 text-purple-700 text-xs font-medium"
+                        className="px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 text-xs font-medium"
                       >
                         {dep}
                       </span>
@@ -225,12 +241,14 @@ export default function FormulaDetail({ formulaName }: Props) {
               )}
             {formula.urls?.head?.url && (
               <div>
-                <span className="text-xs text-gray-500">Head source</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Head source
+                </span>
                 <a
                   href={formula.urls.head.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block text-blue-600 hover:underline break-all font-mono"
+                  className="block text-blue-600 dark:text-blue-300 hover:underline break-all font-mono"
                 >
                   {formula.urls.head.url}
                 </a>
@@ -238,10 +256,10 @@ export default function FormulaDetail({ formulaName }: Props) {
             )}
           </section>
           {formula.analytics?.install && (
-            <section className="rounded-xl shadow-md dark:bg-gray-800 p-6 bg-transparent">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <section className="rounded-xl shadow-md dark:bg-gray-800 bg-white p-6">
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-gray-100">
                 <svg
-                  className="w-5 h-5 text-blue-500"
+                  className="w-5 h-5 text-blue-500 dark:text-blue-400"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth={2}
@@ -260,9 +278,9 @@ export default function FormulaDetail({ formulaName }: Props) {
                   ([period, data]) => (
                     <div
                       key={period}
-                      className="flex-1 min-w-[180px] max-w-xs rounded-lg px-4 py-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 shadow-sm"
+                      className="flex-1 min-w-[180px] max-w-xs rounded-lg px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-700 shadow-sm"
                     >
-                      <div className="mb-1 text-xs text-gray-500 font-semibold flex items-center gap-1">
+                      <div className="mb-1 text-xs text-gray-500 dark:text-gray-400 font-semibold flex items-center gap-1">
                         <span className="uppercase tracking-wide">Period:</span>
                         <span className="font-mono text-blue-700 dark:text-blue-300">
                           {period}
