@@ -11,7 +11,7 @@ const Navigation: React.FC = () => {
           <div className="flex h-full w-full shrink-0 items-center">
             <Link
               href="/"
-              className="flex h-10 w-10 items-center justify-center rounded-lg dark:text-white transition hover:bg-white/10 lg:w-fit lg:py-2 lg:pe-[14px] lg:ps-3"
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-900 dark:text-white transition hover:bg-gray-100 dark:hover:bg-gray-800 lg:w-fit lg:py-2 lg:pe-[14px] lg:ps-3"
               title="Vai alla Home"
             >
               <span className="hidden lg:block text-2xl font-bold">
@@ -31,19 +31,19 @@ const Navigation: React.FC = () => {
         <div className="hidden lg:flex lg:items-center lg:justify-end xl:col-span-4">
           <Link
             href="/"
-            className="ms-4 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+            className="ms-4 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium text-gray-900 dark:text-white transition hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             Home
           </Link>
           <Link
             href="/about"
-            className="ms-4 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+            className="ms-4 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium text-gray-900 dark:text-white transition hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             About
           </Link>
           <Link
             href="/contact"
-            className="ms-4 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+            className="ms-4 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium text-gray-900 dark:text-white transition hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             Contact
           </Link>
@@ -51,7 +51,7 @@ const Navigation: React.FC = () => {
         {/* Mobile Menu Button */}
         <div className="flex items-center md:absolute md:inset-y-0 md:end-0 lg:hidden">
           <button
-            className="inline-flex items-center justify-center rounded-md p-2 text-white transition hover:bg-white/10"
+            className="inline-flex items-center justify-center rounded-md p-2 text-gray-900 dark:text-white transition hover:bg-gray-100 dark:hover:bg-gray-800"
             type="button"
           >
             <span className="sr-only">Apri menu</span>
