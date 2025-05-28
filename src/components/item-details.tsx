@@ -23,7 +23,20 @@ type FormulaDetails = {
   installed?: Array<{ version: string }>;
   deprecated?: boolean;
   disabled?: boolean;
-  bottle?: unknown;
+  bottle?: {
+    stable?: {
+      rebuild?: number;
+      root_url?: string;
+      files?: {
+        [arch: string]: {
+          cellar?: string;
+          url?: string;
+          sha256?: string;
+        };
+      };
+    };
+    [key: string]: unknown;
+  };
   tap?: string;
   analytics?: {
     install?: { [period: string]: { [name: string]: number } };
@@ -184,6 +197,32 @@ export default function FormulaDetail({ formulaName }: Props) {
             </h2>
             <div className="prose dark:prose-invert xl:max-w-[75%] text-gray-800 dark:text-gray-200">
               <p>{formula.desc}</p>
+            </div>
+          </section>
+          <section className="rounded-xl shadow-md dark:bg-gray-800 bg-white p-6">
+            <h2 className="mb-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
+              Supported OS / Architectures
+            </h2>
+            <div className="flex flex-wrap items-center gap-3">
+              {formula.bottle?.stable?.files ? (
+                Object.keys(formula.bottle.stable.files).map((arch) => (
+                  <span
+                    key={arch}
+                    className="px-2 py-1 rounded bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 text-sm font-medium"
+                  >
+                    {arch.replace(/_/g, " ")}
+                  </span>
+                ))
+              ) : (
+                <>
+                  <span className="px-2 py-1 rounded bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 text-sm font-medium">
+                    macOS
+                  </span>
+                  <span className="px-2 py-1 rounded bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 text-sm font-medium">
+                    Linux
+                  </span>
+                </>
+              )}
             </div>
           </section>
           <section className="rounded-xl shadow-md dark:bg-gray-800 bg-white p-6">
