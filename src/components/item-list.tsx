@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Item from "@/components/item";
 import Pagination from "@/components/pagination";
+import { useSearch } from "@/context/search";
 
 interface ItemType {
   id: string;
@@ -29,6 +30,7 @@ const ItemList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const { query } = useSearch();
 
   useEffect(() => {
     setLoading(true);
@@ -108,6 +110,15 @@ const ItemList: React.FC = () => {
     fetchData();
   }, [currentPage]);
 
+  // Filter items based on the search query
+  const filteredItems = query
+    ? items.filter(
+        (item) =>
+          item.title.toLowerCase().includes(query.toLowerCase()) ||
+          item.description.toLowerCase().includes(query.toLowerCase())
+      )
+    : items;
+
   return (
     <>
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -118,7 +129,7 @@ const ItemList: React.FC = () => {
                 className="animate-pulse bg-gray-200 rounded-lg h-48 w-full"
               />
             ))
-          : items.map((item) => (
+          : filteredItems.map((item) => (
               <Item
                 key={item.id}
                 href={item.href}

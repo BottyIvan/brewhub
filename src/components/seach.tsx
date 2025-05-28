@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import { useSearch } from "@/context/search";
 
 const SearchBar: React.FC = () => {
-  const [query, setQuery] = useState("");
+  const { query, setQuery } = useSearch();
 
   return (
     <div className="w-full max-w-md mx-auto">
