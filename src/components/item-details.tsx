@@ -37,13 +37,29 @@ export default function FormulaDetail({ formulaName }: Props) {
   const [formula, setFormula] = useState<FormulaDetails | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Fetch formula details when the component mounts or formulaName changes
   useEffect(() => {
-    fetch(`/api/formula/${formulaName}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setFormula(data);
-        setLoading(false);
-      });
+    /**
+     * Fetches the formula data for the specified formula name from the API.
+     *
+     * This asynchronous function calls the `/api/formula/{formulaName}` endpoint,
+     * parses the response as JSON, updates the component state with the fetched data,
+     * and sets the loading state to false upon completion.
+     *
+     * @async
+     * @returns {Promise<void>} A promise that resolves when the formula data has been fetched and state updated.
+     */
+    const fetchFormula = async () => {
+      // Call the API endpoint for the given formula name
+      const res = await fetch(`/api/formula/${formulaName}`);
+      // Parse the response as JSON
+      const data = await res.json();
+      // Update the state with the fetched formula data
+      setFormula(data);
+      // Set loading to false after data is fetched
+      setLoading(false);
+    };
+    fetchFormula();
   }, [formulaName]);
 
   if (loading)
