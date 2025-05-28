@@ -7,6 +7,7 @@ type FormulaDetails = {
   name: string;
   full_name?: string;
   desc: string;
+  image?: string;
   license?: string;
   homepage: string;
   versions: {
@@ -50,13 +51,20 @@ export default function FormulaDetail({ formulaName }: Props) {
      * @returns {Promise<void>} A promise that resolves when the formula data has been fetched and state updated.
      */
     const fetchFormula = async () => {
-      // Call the API endpoint for the given formula name
       const res = await fetch(`/api/formula/${formulaName}`);
-      // Parse the response as JSON
       const data = await res.json();
-      // Update the state with the fetched formula data
-      setFormula(data);
-      // Set loading to false after data is fetched
+      // Try to generate a favicon URL from the homepage
+      let favicon: string | undefined;
+      if (data.homepage) {
+        try {
+          const url = new URL(data.homepage);
+          favicon = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=64`;
+        } catch {
+          favicon = undefined;
+        }
+      }
+      // Attach favicon to the data object (if you want to use it elsewhere)
+      setFormula({ ...data, image: favicon });
       setLoading(false);
     };
     fetchFormula();
@@ -79,15 +87,16 @@ export default function FormulaDetail({ formulaName }: Props) {
     <main className="min-h-screen">
       <div className="max-w-5xl mx-auto px-4 grid grid-cols-1 2xl:grid-cols-details2xl gap-8">
         <header className="flex flex-col sm:flex-row items-center gap-7 py-7 p-6  rounded-2xl shadow-lg">
-          <div className="relative flex h-[128px] w-[128px] min-w-[128px] rounded-xl overflow-hidden shadow-md bg-gradient-to-br from-white to-violet-50">
+          <div className="relative flex h-[64px] w-[64px] shrink-0 flex-wrap items-center justify-center rounded-xl drop-shadow-md md:h-[96px] md:w-[96px] bg-gradient-to-br from-white to-violet-50">
             <Image
-              alt={`${formula.full_name ?? formula.name} logo`}
-              width={128}
-              height={128}
-              src="/brew-icon.svg"
-              style={{ maxWidth: "100%" }}
+              alt={`${formula.name} Logo`}
+              aria-hidden="true"
+              loading="lazy"
+              width={25}
+              height={25}
+              src={formula.image ?? "/images/default-logo.png"}
               className="object-contain"
-              priority
+              style={{ color: "transparent", maxWidth: "100%" }}
             />
           </div>
           <div className="flex flex-col my-auto gap-2 flex-1">
