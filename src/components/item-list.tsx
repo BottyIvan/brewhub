@@ -55,7 +55,7 @@ const ItemList: React.FC = () => {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ page: currentPage, limit: 500 }),
+          body: JSON.stringify({ query: query, page: currentPage, limit: 500 }),
         };
 
         // Fetch data from the API
@@ -108,16 +108,7 @@ const ItemList: React.FC = () => {
     };
 
     fetchData();
-  }, [currentPage]);
-
-  // Filter items based on the search query
-  const filteredItems = query
-    ? items.filter(
-        (item) =>
-          item.title.toLowerCase().includes(query.toLowerCase()) ||
-          item.description.toLowerCase().includes(query.toLowerCase())
-      )
-    : items;
+  }, [currentPage, query]);
 
   return (
     <>
@@ -129,7 +120,7 @@ const ItemList: React.FC = () => {
                 className="animate-pulse bg-gray-200 rounded-lg h-48 w-full"
               />
             ))
-          : filteredItems.map((item) => (
+          : items.map((item) => (
               <Item
                 key={item.id}
                 href={item.href}
