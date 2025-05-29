@@ -1,7 +1,15 @@
 import { NextResponse } from "next/server";
 
+type FormulaItem = {
+  name?: string;
+  full_name?: string;
+  desc?: string;
+  [key: string]: unknown;
+};
+
 export async function POST(req: Request) {
   const body = await req.json();
+  const query = body.query ?? "";
   const page = body.page ?? "1";
   const limit = body.limit ?? "10";
 
@@ -14,7 +22,20 @@ export async function POST(req: Request) {
     );
   }
 
-  const data = await res.json();
+  let data = await res.json();
+
+  data = data.filter((Item: FormulaItem) => {
+    if (query) {
+      const searchQuery = query.toLowerCase();
+      return (
+        (Item.name ?? "").toLowerCase().includes(searchQuery) ||
+        (Item.full_name ?? "").toLowerCase().includes(searchQuery) ||
+        (Item.desc ?? "").toLowerCase().includes(searchQuery)
+      );
+    }
+    return true; // If no query, return all items
+  });
+
   const pages = Math.ceil(data.length / parseInt(limit));
   if (parseInt(page) < 1 || parseInt(page) > pages) {
     return NextResponse.json({ error: "Page out of range" }, { status: 400 });
