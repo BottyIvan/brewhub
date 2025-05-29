@@ -1,4 +1,5 @@
 import React from "react";
+import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/16/solid";
 
 type PaginationProps = {
   currentPage: number;
@@ -34,7 +35,7 @@ const Pagination: React.FC<PaginationProps> = ({
         aria-label="Previous page"
         className={`px-3 py-1 rounded-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed`}
       >
-        &lt;
+        <ChevronLeftIcon className="inline-block w-4 h-4" />
       </button>
       {pages.map((page) => (
         <button
@@ -56,7 +57,7 @@ const Pagination: React.FC<PaginationProps> = ({
         aria-label="Next page"
         className={`px-3 py-1 rounded-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed`}
       >
-        &gt;
+        <ChevronRightIcon className="inline-block w-4 h-4" />
       </button>
     </nav>
   );
