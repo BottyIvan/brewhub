@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "electron": "ELECTRON_START_URL=http://localhost:3000 electron electron.js",
+    "electron:prod": "next build && next start & ELECTRON_START_URL=http://localhost:3000 electron electron.js"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -21,6 +23,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "electron": "^36.4.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "tailwindcss": "^4",
