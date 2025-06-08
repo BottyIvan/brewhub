@@ -1,13 +1,13 @@
 import Navigation from "@/components/navigation";
 import FormulaDetail from "@/components/item-details";
 
-interface PageProps {
-  params: {
-    slug: string;
-  };
-}
-
-export default async function DetailPage({ params }: PageProps) {
+export default async function DetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  // Extract the slug from the params
+  // This is the dynamic segment of the URL, e.g., /formula/some-formula
   const { slug } = await params;
 
   return (
