@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import SearchBar from "./seach";
+import { WalletIcon } from "@heroicons/react/16/solid";
 
 const Navigation: React.FC = () => {
   return (
@@ -30,22 +31,10 @@ const Navigation: React.FC = () => {
         {/* Desktop Links */}
         <div className="hidden lg:flex lg:items-center lg:justify-end xl:col-span-4">
           <Link
-            href="/"
+            href="/formule"
             className="ms-4 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium text-gray-900 dark:text-white transition hover:bg-gray-100 dark:hover:bg-gray-800"
           >
-            Home
-          </Link>
-          <Link
-            href="/about"
-            className="ms-4 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium text-gray-900 dark:text-white transition hover:bg-gray-100 dark:hover:bg-gray-800"
-          >
-            About
-          </Link>
-          <Link
-            href="/contact"
-            className="ms-4 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium text-gray-900 dark:text-white transition hover:bg-gray-100 dark:hover:bg-gray-800"
-          >
-            Contact
+            <WalletIcon className="me-2 h-5 w-5" />
           </Link>
         </div>
         {/* Mobile Menu Button */}
