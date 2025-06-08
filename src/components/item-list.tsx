@@ -148,7 +148,7 @@ const ItemList: React.FC<ItemListProps> = ({
     };
 
     fetchData();
-  }, [currentPage, query]);
+  }, [currentPage, query, enableInstalledCheck]);
 
   return (
     <>
