@@ -13,7 +13,8 @@
     "lint": "next lint",
     "electron": "ELECTRON_START_URL=http://localhost:3000 electron electron.js",
     "electron:prod": "next build && next start & ELECTRON_START_URL=http://localhost:3000 electron electron.js",
-    "electron:dist": "next build && electron-builder"
+    "electron:dist": "next build && electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
