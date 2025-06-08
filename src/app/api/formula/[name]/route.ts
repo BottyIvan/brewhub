@@ -1,20 +1,18 @@
 import { NextResponse } from "next/server";
 
-interface Params {
-  params: { name: string };
-}
-
-export async function GET(request: Request, context: Params) {
-  const { params } = context;
-  const { name } = await params;
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  const { slug } = await params;
 
   const res = await fetch(
-    `https://formulae.brew.sh/api/formula/${encodeURIComponent(name)}.json`
+    `https://formulae.brew.sh/api/formula/${encodeURIComponent(slug)}.json`
   );
 
   if (!res.ok) {
     return NextResponse.json(
-      { error: `Formula ${name} not found` },
+      { error: `Formula ${slug} not found` },
       { status: 404 }
     );
   }
