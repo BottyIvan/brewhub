@@ -29,5 +29,18 @@
     "eslint-config-next": "15.3.2",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "build": {
+    "appId": "cloud.ivanbotty.brewhub",
+    "productName": "BrewHub",
+    "mac": {
+      "icon": "public/macos_dev/AppIcon.icns"
+    },
+    "win": {
+      "icon": "public/web_dev/favicon.ico"
+    },
+    "linux": {
+      "icon": "public/web_dev/icon-512-maskable.png"
+    }
   }
 }
