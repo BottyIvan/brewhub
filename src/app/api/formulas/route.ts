@@ -12,6 +12,7 @@ export async function POST(req: Request) {
   const query = body.query ?? "";
   const page = body.page ?? "1";
   const limit = body.limit ?? "10";
+  const formulas: string[] | undefined = body.formulas;
 
   const res = await fetch("https://formulae.brew.sh/api/formula.json");
 
@@ -24,17 +25,26 @@ export async function POST(req: Request) {
 
   let data = await res.json();
 
-  data = data.filter((Item: FormulaItem) => {
-    if (query) {
-      const searchQuery = query.toLowerCase();
-      return (
-        (Item.name ?? "").toLowerCase().includes(searchQuery) ||
-        (Item.full_name ?? "").toLowerCase().includes(searchQuery) ||
-        (Item.desc ?? "").toLowerCase().includes(searchQuery)
-      );
-    }
-    return true; // If no query, return all items
-  });
+  // If formulas is present, filter only those
+  if (Array.isArray(formulas) && formulas.length > 0) {
+    data = data.filter(
+      (item: FormulaItem) =>
+        typeof item.name === "string" && formulas.includes(item.name)
+    );
+  } else {
+    // Otherwise, apply the query filter
+    data = data.filter((item: FormulaItem) => {
+      if (query) {
+        const searchQuery = query.toLowerCase();
+        return (
+          (item.name ?? "").toLowerCase().includes(searchQuery) ||
+          (item.full_name ?? "").toLowerCase().includes(searchQuery) ||
+          (item.desc ?? "").toLowerCase().includes(searchQuery)
+        );
+      }
+      return true; // If no query, return all items
+    });
+  }
 
   const pages = Math.ceil(data.length / parseInt(limit));
   if (parseInt(page) < 1 || parseInt(page) > pages) {
