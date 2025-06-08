@@ -7,8 +7,8 @@ interface PageProps {
   };
 }
 
-export default function DetailPage({ params }: PageProps) {
-  const { slug } = params;
+export default async function DetailPage({ params }: PageProps) {
+  const { slug } = await params;
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-gray-50 via-white to-gray-200 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
