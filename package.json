@@ -6,14 +6,14 @@
   "type": "module",
   "description": "A place to find and share your favorite brews.",
   "author": "Ivan Bottigelli",
+  "main": "electron.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "lint": "next lint",
-    "postinstall": "electron-builder install-app-deps"
+    "start": "next build && electron-forge start",
+    "package": "next build && electron-forge package",
+    "make": "next build && electron-forge make",
+    "lint": "next lint"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -25,37 +25,69 @@
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.8.1",
+    "@electron-forge/maker-deb": "^7.8.1",
+    "@electron-forge/maker-dmg": "^7.8.1",
+    "@electron-forge/maker-rpm": "^7.8.1",
+    "@electron-forge/maker-squirrel": "^7.8.1",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "electron": "^36.4.0",
-    "electron-builder": "^26.0.12",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
-  "build": {
-    "appId": "cloud.ivanbotty.brewhub",
-    "productName": "BrewHub",
-    "mac": {
-      "icon": "public/macos_dev/AppIcon.icns",
-      "target": [
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "icon": "public/macos_dev/AppIcon"
+      },
+      "makers": [
         {
-          "target": "dmg",
-          "arch": [
-            "universal"
-          ]
+          "name": "@electron-forge/maker-dmg",
+          "platforms": [
+            "darwin"
+          ],
+          "config": {
+            "icon": "public/macos_dev/AppIcon.icns",
+            "format": "ULFO"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "platforms": [
+            "win32"
+          ],
+          "config": {
+            "iconUrl": "public/web_dev/favicon.ico"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "platforms": [
+            "linux"
+          ],
+          "config": {
+            "options": {
+              "icon": "public/web_dev/icon-512-maskable.png"
+            }
+          }
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "platforms": [
+            "linux"
+          ],
+          "config": {
+            "options": {
+              "icon": "public/web_dev/icon-512-maskable.png"
+            }
+          }
         }
       ]
-    },
-    "win": {
-      "icon": "public/web_dev/favicon.ico"
-    },
-    "linux": {
-      "icon": "public/web_dev/icon-512-maskable.png"
     }
   }
 }
