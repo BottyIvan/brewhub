@@ -38,20 +38,22 @@ function createWindow() {
     const startUrl = process.env.ELECTRON_START_URL || `http://localhost:3000`;
     mainWindow.loadURL(startUrl);
 
-    // Set up the custom menu with the app name
-    const appName = process.env.npm_package_productName || process.env.npm_package_name || 'BrewHub';
-    const template = [
-        {
-            label: appName,
-            submenu: [
-                { role: 'about', label: `About ${appName}` },
-                { type: 'separator' },
-                { role: 'quit', label: 'Quit' }
-            ]
-        }
-    ];
-    const menu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(menu);
+    // Set up the custom menu only in production
+    if (process.env.NODE_ENV === 'production') {
+        const appName = process.env.npm_package_productName || process.env.npm_package_name || 'BrewHub';
+        const template = [
+            {
+                label: appName,
+                submenu: [
+                    { role: 'about', label: `About ${appName}` },
+                    { type: 'separator' },
+                    { role: 'quit', label: 'Quit' }
+                ]
+            }
+        ];
+        const menu = Menu.buildFromTemplate(template);
+        Menu.setApplicationMenu(menu);
+    }
 
     mainWindow.once('ready-to-show', () => {
         splash.destroy();
