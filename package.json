@@ -6,6 +6,7 @@
   "type": "module",
   "description": "A place to find and share your favorite brews.",
   "author": "Ivan Bottigelli",
+  "license": "MIT",
   "main": "electron.js",
   "scripts": {
     "dev": "next dev",
