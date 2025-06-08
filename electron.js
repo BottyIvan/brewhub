@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu } from 'electron';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { execFile } from 'child_process';
@@ -26,6 +26,7 @@ function createWindow() {
         height: 800,
         icon: path.join(__dirname, 'public', 'icon.png'),
         show: false,
+        title: process.env.npm_package_name || 'BrewHub',
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
@@ -36,6 +37,21 @@ function createWindow() {
     // In dev, load localhost; in prod, load built Next.js app
     const startUrl = process.env.ELECTRON_START_URL || `http://localhost:3000`;
     mainWindow.loadURL(startUrl);
+
+    // Set up the custom menu with the app name
+    const appName = process.env.npm_package_productName || process.env.npm_package_name || 'BrewHub';
+    const template = [
+        {
+            label: appName,
+            submenu: [
+                { role: 'about', label: `About ${appName}` },
+                { type: 'separator' },
+                { role: 'quit', label: 'Quit' }
+            ]
+        }
+    ];
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
 
     mainWindow.once('ready-to-show', () => {
         splash.destroy();
