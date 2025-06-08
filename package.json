@@ -41,7 +41,8 @@
     "appId": "cloud.ivanbotty.brewhub",
     "productName": "BrewHub",
     "mac": {
-      "icon": "public/macos_dev/AppIcon.icns"
+      "icon": "public/macos_dev/AppIcon.icns",
+      "target": "universal"
     },
     "win": {
       "icon": "public/web_dev/favicon.ico"
