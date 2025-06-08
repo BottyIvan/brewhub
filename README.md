@@ -18,6 +18,27 @@ With BrewHub you can:
 - **Statistics**: view installation and popularity data
 - **User experience**: polished interface, dark mode, mobile and desktop optimization
 
+## Project Dependencies
+
+Main dependencies:
+- [Next.js](https://nextjs.org/) `15.3.2`
+- [React](https://react.dev/) `^19.0.0`
+- [Electron](https://www.electronjs.org/) `^36.4.0`
+- [@heroicons/react](https://github.com/tailwindlabs/heroicons) `^2.2.0`
+- [uuid](https://github.com/uuidjs/uuid) `^11.1.0`
+- [dotenv](https://github.com/motdotla/dotenv) `^16.5.0`
+
+Dev dependencies:
+- [electron-forge](https://www.electronforge.io/) `^7.8.1`
+- [eslint](https://eslint.org/) `^9`
+- [tailwindcss](https://tailwindcss.com/) `^4`
+- [typescript](https://www.typescriptlang.org/) `^5`
+- and more (see `package.json` for the full list)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
 ## Getting Started
 
 To start the web development server:
