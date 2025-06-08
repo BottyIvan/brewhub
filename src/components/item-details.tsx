@@ -49,6 +49,99 @@ interface Props {
 
 // Header Section
 function HeaderSection({ formula }: { readonly formula: FormulaDetails }) {
+  const [isInstalled, setIsInstalled] = useState<boolean>(false);
+  const [loadingAction, setLoadingAction] = useState<
+    "install" | "update" | "uninstall" | null
+  >(null);
+
+  const handleInstall = async () => {
+    setLoadingAction("install");
+    try {
+      if (typeof window !== "undefined" && window.electron?.runBrew) {
+        const result = await window.electron.runBrew(["install", formula.name]);
+        if (result.output) {
+          alert("Installation completed:\n" + result.output);
+          setIsInstalled(true);
+        } else {
+          alert("Error:\n" + result.error);
+        }
+      } else {
+        alert("This feature is only available in the Electron desktop app.");
+      }
+    } catch {
+      alert("Unexpected error during install.");
+    }
+    setLoadingAction(null);
+  };
+
+  const handleUpdate = async () => {
+    setLoadingAction("update");
+    try {
+      if (typeof window !== "undefined" && window.electron?.runBrew) {
+        const result = await window.electron.runBrew(["upgrade", formula.name]);
+        if (result.output) {
+          alert("Update completed:\n" + result.output);
+        } else {
+          alert("Error:\n" + result.error);
+        }
+      } else {
+        alert("This feature is only available in the Electron desktop app.");
+      }
+    } catch {
+      alert("Unexpected error during update.");
+    }
+    setLoadingAction(null);
+  };
+
+  const handleUninstall = async () => {
+    setLoadingAction("uninstall");
+    try {
+      if (
+        typeof window !== "undefined" &&
+        window.electron?.runBrew &&
+        confirm("Are you sure you want to uninstall this formula?")
+      ) {
+        const result = await window.electron.runBrew([
+          "uninstall",
+          formula.name,
+        ]);
+        if (result.output) {
+          alert("Uninstallation completed:\n" + result.output);
+          setIsInstalled(false);
+        } else {
+          alert("Error:\n" + result.error);
+        }
+      } else if (typeof window === "undefined" || !window.electron?.runBrew) {
+        alert("This feature is only available in the Electron desktop app.");
+      }
+    } catch {
+      alert("Unexpected error during uninstall.");
+    }
+    setLoadingAction(null);
+  };
+
+  // Check if the formula is installed (returns a boolean)
+  const isFormulaInstalled = async (): Promise<boolean> => {
+    if (typeof window !== "undefined" && window.electron?.runBrew) {
+      const result = await window.electron.runBrew([
+        "list",
+        "--versions",
+        formula.name,
+      ]);
+      return !!(result.output && result.output.trim() !== "");
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    const checkInstallation = async () => {
+      const installed = await isFormulaInstalled();
+      setIsInstalled(installed);
+    };
+    checkInstallation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formula.name]);
+
   return (
     <header className="flex flex-col sm:flex-row items-center gap-7 py-7 p-6 rounded-2xl shadow-lg">
       <div className="relative flex h-[64px] w-[64px] shrink-0 flex-wrap items-center justify-center rounded-xl drop-shadow-md md:h-[96px] md:w-[96px] bg-gradient-to-br from-white to-violet-50">
@@ -77,6 +170,82 @@ function HeaderSection({ formula }: { readonly formula: FormulaDetails }) {
             <span className="ml-2 px-2 py-1 text-xs rounded bg-yellow-100 text-yellow-700 font-semibold">
               Disabled
             </span>
+          )}
+          {/* Pulsanti dinamici */}
+          {typeof window !== "undefined" && window.electron && (
+            <>
+              {!isInstalled && (
+                <button
+                  className="ml-4 px-3 py-1.5 rounded-md bg-green-600 text-white font-semibold text-xs hover:bg-green-700 transition"
+                  type="button"
+                  onClick={handleInstall}
+                  disabled={loadingAction !== null}
+                >
+                  <svg
+                    className="w-4 h-4 mr-1 inline"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"
+                    />
+                  </svg>
+                  {loadingAction === "install" ? "Installing..." : "Install"}
+                </button>
+              )}
+              {isInstalled && (
+                <>
+                  <button
+                    className="ml-2 px-3 py-1.5 rounded-md bg-yellow-500 text-white font-semibold text-xs hover:bg-yellow-600 transition"
+                    type="button"
+                    onClick={handleUpdate}
+                    disabled={loadingAction !== null}
+                  >
+                    <svg
+                      className="w-4 h-4 mr-1 inline"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4 4v5h.582M20 20v-5h-.581M5 9A7 7 0 0119 15.071M19 15.071V15a7 7 0 00-14 0v.071"
+                      />
+                    </svg>
+                    {loadingAction === "update" ? "Updating..." : "Update"}
+                  </button>
+                  <button
+                    className="ml-2 px-3 py-1.5 rounded-md bg-red-600 text-white font-semibold text-xs hover:bg-red-700 transition"
+                    type="button"
+                    onClick={handleUninstall}
+                    disabled={loadingAction !== null}
+                  >
+                    <svg
+                      className="w-4 h-4 mr-1 inline"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M10 3h4a1 1 0 011 1v2H9V4a1 1 0 011-1z"
+                      />
+                    </svg>
+                    {loadingAction === "uninstall"
+                      ? "Uninstalling..."
+                      : "Uninstall"}
+                  </button>
+                </>
+              )}
+            </>
           )}
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -416,32 +585,6 @@ export default function FormulaDetail({ formulaName }: Props) {
     fetchFormula();
   }, [formulaName]);
 
-  const installFormula = async (name: string) => {
-    if (typeof window !== "undefined" && window.electron?.runBrew) {
-      const result = await window.electron.runBrew(["install", name]);
-      if (result.output) {
-        alert("Installation successful:\n" + result.output);
-      } else {
-        alert("Error:\n" + result.error);
-      }
-    } else {
-      alert("This feature is only available in the Electron desktop app.");
-    }
-  };
-
-  const infoFormula = async (name: string) => {
-    if (typeof window !== "undefined" && window.electron?.runBrew) {
-      const result = await window.electron.runBrew(["info", name]);
-      if (result.output) {
-        alert("Information retrieved successfully:\n" + result.output);
-      } else {
-        alert("Error:\n" + result.error);
-      }
-    } else {
-      alert("This feature is only available in the Electron desktop app.");
-    }
-  };
-
   if (loading)
     return (
       <div className="flex items-center justify-center h-96">
@@ -463,18 +606,6 @@ export default function FormulaDetail({ formulaName }: Props) {
           <DescriptionSection desc={formula.desc} />
           <SupportedOSSection bottle={formula.bottle} />
           <InstallCommandSection name={formula.name} />
-          <button
-            className="mt-4 px-4 py-2 rounded bg-green-600 text-white font-semibold hover:bg-green-700 transition"
-            onClick={() => installFormula(formula.name)}
-          >
-            Install with Homebrew
-          </button>
-          <button
-            className="mt-2 px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
-            onClick={() => infoFormula(formula.name)}
-          >
-            Get Info with Homebrew
-          </button>
           <VersionsDependenciesSection formula={formula} />
           <AnalyticsSection analytics={formula.analytics} />
         </div>
