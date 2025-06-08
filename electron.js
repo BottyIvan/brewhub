@@ -1,22 +1,46 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { execFile } from 'child_process';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+let mainWindow;
+let splash;
+
 function createWindow() {
-    const win = new BrowserWindow({
+    splash = new BrowserWindow({
         width: 1200,
         height: 800,
-        icon: path.join(process.cwd(), 'public', 'icon.png'),
+        frame: false,
+        alwaysOnTop: true,
+        transparent: true,
+        show: true,
+    });
+    splash.loadFile(path.join(__dirname, 'splash.html')).catch(console.error);
+
+    // Create the main window but do not show it immediately
+    mainWindow = new BrowserWindow({
+        width: 1200,
+        height: 800,
+        icon: path.join(__dirname, 'public', 'icon.png'),
+        show: false,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
-            preload: path.join(process.cwd(), 'preload.js'), // add preload
+            preload: path.join(__dirname, 'preload.js'),
         },
     });
 
     // In dev, load localhost; in prod, load built Next.js app
     const startUrl = process.env.ELECTRON_START_URL || `http://localhost:3000`;
-    win.loadURL(startUrl);
+    mainWindow.loadURL(startUrl);
+
+    mainWindow.once('ready-to-show', () => {
+        splash.destroy();
+        mainWindow.show();
+    });
 }
 
 // IPC handler to execute brew commands
