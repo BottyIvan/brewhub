@@ -416,6 +416,32 @@ export default function FormulaDetail({ formulaName }: Props) {
     fetchFormula();
   }, [formulaName]);
 
+  const installFormula = async (name: string) => {
+    if (typeof window !== "undefined" && window.electron?.runBrew) {
+      const result = await window.electron.runBrew(["install", name]);
+      if (result.output) {
+        alert("Installation successful:\n" + result.output);
+      } else {
+        alert("Error:\n" + result.error);
+      }
+    } else {
+      alert("This feature is only available in the Electron desktop app.");
+    }
+  };
+
+  const infoFormula = async (name: string) => {
+    if (typeof window !== "undefined" && window.electron?.runBrew) {
+      const result = await window.electron.runBrew(["info", name]);
+      if (result.output) {
+        alert("Information retrieved successfully:\n" + result.output);
+      } else {
+        alert("Error:\n" + result.error);
+      }
+    } else {
+      alert("This feature is only available in the Electron desktop app.");
+    }
+  };
+
   if (loading)
     return (
       <div className="flex items-center justify-center h-96">
@@ -437,6 +463,18 @@ export default function FormulaDetail({ formulaName }: Props) {
           <DescriptionSection desc={formula.desc} />
           <SupportedOSSection bottle={formula.bottle} />
           <InstallCommandSection name={formula.name} />
+          <button
+            className="mt-4 px-4 py-2 rounded bg-green-600 text-white font-semibold hover:bg-green-700 transition"
+            onClick={() => installFormula(formula.name)}
+          >
+            Install with Homebrew
+          </button>
+          <button
+            className="mt-2 px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+            onClick={() => infoFormula(formula.name)}
+          >
+            Get Info with Homebrew
+          </button>
           <VersionsDependenciesSection formula={formula} />
           <AnalyticsSection analytics={formula.analytics} />
         </div>
