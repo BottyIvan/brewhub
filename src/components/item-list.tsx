@@ -25,7 +25,13 @@ interface MappedItemType {
   verified: boolean;
 }
 
-const ItemList: React.FC = () => {
+interface ItemListProps {
+  enableInstalledCheck?: boolean;
+}
+
+const ItemList: React.FC<ItemListProps> = ({
+  enableInstalledCheck = false,
+}) => {
   const [items, setItems] = useState<MappedItemType[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,6 +40,24 @@ const ItemList: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
+
+    const getInstalledFormulas = async (names: string[]) => {
+      if (typeof window !== "undefined" && window.electron?.runBrew) {
+        const result = await window.electron.runBrew([
+          "list",
+          "--versions",
+          ...names,
+        ]);
+        // result.output is a string with installed formula names and versions
+        // Split by line and extract the formula name
+        const installed = (result.output ?? "")
+          .split("\n")
+          .map((line) => line.split(" ")[0])
+          .filter(Boolean);
+        return new Set(installed);
+      }
+      return new Set<string>();
+    };
 
     /**
      * Fetches a paginated list of formulas from the `/api/formulas` endpoint using a POST request.
@@ -48,6 +72,22 @@ const ItemList: React.FC = () => {
      */
     const fetchData = async () => {
       try {
+        let bodyRequest: unknown = {
+          query: query,
+          page: currentPage,
+          limit: 500,
+        };
+
+        // If installed check is enabled, retrieve the list of installed formulas
+        if (enableInstalledCheck) {
+          // Retrieve the list of installed formulas
+          const installedSet = await getInstalledFormulas([]);
+          // Convert it to an array
+          const installedList = Array.from(installedSet);
+          // Send the list to the API
+          bodyRequest = { formulas: installedList };
+        }
+
         // Prepare the POST request options
         const requestInit: RequestInit = {
           method: "POST",
@@ -55,7 +95,7 @@ const ItemList: React.FC = () => {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ query: query, page: currentPage, limit: 500 }),
+          body: JSON.stringify(bodyRequest),
         };
 
         // Fetch data from the API
