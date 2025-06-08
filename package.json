@@ -42,7 +42,8 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "icon": "public/macos_dev/AppIcon"
+        "icon": "public/macos_dev/AppIcon",
+        "executableName": "BrewHub"
       },
       "makers": [
         {
