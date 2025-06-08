@@ -42,7 +42,14 @@
     "productName": "BrewHub",
     "mac": {
       "icon": "public/macos_dev/AppIcon.icns",
-      "target": "universal"
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        }
+      ]
     },
     "win": {
       "icon": "public/web_dev/favicon.ico"
