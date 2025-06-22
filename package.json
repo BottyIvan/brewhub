@@ -44,7 +44,14 @@
     "forge": {
       "packagerConfig": {
         "icon": "public/macos_dev/AppIcon",
-        "executableName": "brewhub"
+        "executableName": "brewhub",
+        "files": [
+          "electron.js",
+          ".next/",
+          "public/",
+          "node_modules/",
+          "package.json"
+        ]
       },
       "makers": [
         {
