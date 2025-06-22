@@ -8,6 +8,29 @@ const __dirname = path.dirname(__filename);
 
 let mainWindow;
 let splash;
+let nextServerProcess;
+
+function startNextServer() {
+    return new Promise((resolve) => {
+        // start the Next.js server using npx
+        nextServerProcess = spawn('npx', ['next', 'start', '-p', '3000'], { cwd: __dirname });
+
+        nextServerProcess.stdout.on('data', (data) => {
+            console.log(`Next.js: ${data}`);
+            if (data.toString().includes('started server on')) {
+                resolve();
+            }
+        });
+
+        nextServerProcess.stderr.on('data', (data) => {
+            console.error(`Next.js error: ${data}`);
+        });
+
+        nextServerProcess.on('close', (code) => {
+            console.log(`Next.js process exited with code ${code}`);
+        });
+    });
+}
 
 function createWindow() {
     splash = new BrowserWindow({
@@ -74,7 +97,11 @@ ipcMain.handle('brew:run', async (_event, args) => {
     });
 });
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+    // Start the Next.js server if in production
+    if (process.env.NODE_ENV === 'production') {
+        await startNextServer();
+    }
     createWindow();
 
     app.on('activate', function () {
@@ -83,5 +110,9 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', function () {
+    // Kill the Next.js server process when all windows are closed
+    if (nextServerProcess) {
+        nextServerProcess.kill();
+    }
     if (process.platform !== 'darwin') app.quit();
 });
