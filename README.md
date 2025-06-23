@@ -1,5 +1,13 @@
 # BrewHub
 
+> [!NOTE]
+> 🚀 **For macOS users:**  
+> Before opening the app for the first time, you need to run the following command to remove quarantine attributes:
+> 
+> ```bash
+> xattr -rc /Applications/BrewHub.app
+> ```
+
 BrewHub is a web and desktop app built with [Next.js](https://nextjs.org/) and Electron that lets you explore, search, and manage [Homebrew](https://brew.sh/) formulas.  
 With BrewHub you can:
 
