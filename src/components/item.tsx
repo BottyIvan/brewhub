@@ -17,17 +17,16 @@ export const Item: React.FC<ItemProps> = ({
   description,
   verified = false,
 }) => (
-  <div>
+  <article className="h-full">
     <Link
       aria-label={title}
-      aria-description={description}
-      className="flex min-w-0 items-center gap-4 duration-500 hover:cursor-pointer hover:no-underline active:bg-flathub-gainsborow/40 dark:active:bg-flathub-arsenic h-full bg-flathub-white dark:bg-flathub-arsenic rounded-xl shadow-md hover:bg-flathub-lotion dark:hover:bg-flathub-arsenic/90 p-4"
+      title={description}
+      className="flex min-w-0 items-center gap-4 duration-500 hover:cursor-pointer hover:no-underline h-full bg-white dark:bg-gray-800 rounded-xl shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 p-4"
       href={href}
     >
-      <div className="relative flex h-[64px] w-[64px] shrink-0 flex-wrap items-center justify-center rounded-xl drop-shadow-md md:h-[96px] md:w-[96px] bg-gradient-to-br from-white to-violet-50">
+      <div className="relative flex h-[64px] w-[64px] shrink-0 flex-wrap items-center justify-center rounded drop-shadow-md md:h-[96px] md:w-[96px] bg-gradient-to-br from-white to-violet-50">
         <Image
           alt={`${title} Logo`}
-          aria-hidden="true"
           loading="lazy"
           width={25}
           height={25}
@@ -37,18 +36,15 @@ export const Item: React.FC<ItemProps> = ({
         />
       </div>
       <div className="flex flex-col justify-center overflow-hidden">
-        <div className="flex gap-1">
-          <span className="truncate whitespace-nowrap text-base font-semibold text-flathub-dark-gunmetal dark:text-flathub-gainsborow">
+        <div className="flex gap-1 items-center">
+          <h3 className="truncate whitespace-nowrap text-base font-semibold text-gray-900 dark:text-gray-100 m-0">
             {title}
-          </span>
+          </h3>
           {verified && (
-            <button
-              aria-label="This app is verified"
+            <span
               className="size-6 flex justify-center items-center"
-              data-state="closed"
-              data-slot="tooltip-trigger"
-              tabIndex={-1}
-              type="button"
+              aria-label="App verificata"
+              title="App verificata"
             >
               <svg
                 stroke="currentColor"
@@ -56,8 +52,7 @@ export const Item: React.FC<ItemProps> = ({
                 strokeWidth="0"
                 viewBox="0 0 20 20"
                 aria-hidden="true"
-                className="size-5 text-flathub-celestial-blue"
-                aria-label="This app is verified"
+                className="size-5 text-blue-500"
                 height="1em"
                 width="1em"
                 xmlns="http://www.w3.org/2000/svg"
@@ -68,15 +63,18 @@ export const Item: React.FC<ItemProps> = ({
                   clipRule="evenodd"
                 ></path>
               </svg>
-            </button>
+            </span>
           )}
         </div>
-        <div className="mt-1 line-clamp-2 text-sm text-flathub-dark-gunmetal dark:text-flathub-gainsborow md:line-clamp-3">
+        <p
+          className="mt-1 line-clamp-2 text-sm text-gray-900 dark:text-gray-100 md:line-clamp-3"
+          id={`desc-${title.replace(/\s+/g, "-").toLowerCase()}`}
+        >
           {description}
-        </div>
+        </p>
       </div>
     </Link>
-  </div>
+  </article>
 );
 
 export default Item;
