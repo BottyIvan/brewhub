@@ -15,8 +15,17 @@ const Pagination: React.FC<PaginationProps> = ({
   className = "",
 }) => {
   if (totalPages <= 1) return null;
+  // Calculate the first page number to display (at most 2 before current page)
+  const startPage = Math.max(1, currentPage - 2);
 
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  // Calculate the last page number to display (at most 2 after current page)
+  const endPage = Math.min(totalPages, currentPage + 2);
+
+  // Generate the array of page numbers to render in the pagination
+  const pages = Array.from(
+    { length: endPage - startPage + 1 },
+    (_, i) => startPage + i
+  );
 
   const handleClick = (page: number) => {
     if (page !== currentPage && page >= 1 && page <= totalPages) {
