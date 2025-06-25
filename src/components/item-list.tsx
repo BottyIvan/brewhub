@@ -172,12 +172,12 @@ const ItemList: React.FC<ItemListProps> = ({
             ))}
       </div>
       {totalPages > 1 && (
-        <div className="sticky bottom-0 z-30 mt-8 py-3">
+        <div className="sticky bottom-0 z-30 mt-8 py-3 flex justify-center items-center">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
-            className="rounded-full backdrop-blur-2xl mx-auto py-3"
+            className="rounded-full backdrop-blur-2xl mx-auto p-3"
           />
         </div>
       )}
