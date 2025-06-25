@@ -8,7 +8,7 @@ export default function Home() {
         <Navigation />
       </header>
       <main className="flex min-h-screen flex-col items-center py-10">
-        <div className="w-full max-w-7xl px-4">
+        <div className="w-full max-w-7xl px-4 mx-auto">
           <h1 className="text-3xl font-bold mb-8 text-gray-800 dark:text-gray-100 z-10 relative">
             Discover Apps
           </h1>
