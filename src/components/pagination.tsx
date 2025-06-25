@@ -42,7 +42,7 @@ const Pagination: React.FC<PaginationProps> = ({
         onClick={() => handleClick(currentPage - 1)}
         disabled={currentPage === 1}
         aria-label="Previous page"
-        className={`px-3 py-1 rounded-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed`}
+        className={`px-3 py-1 rounded-full border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed`}
       >
         <ChevronLeftIcon className="inline-block w-4 h-4" />
       </button>
@@ -50,7 +50,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           key={page}
           onClick={() => handleClick(page)}
-          className={`px-3 py-1 rounded-md border ${
+          className={`px-3 py-1 rounded-full border ${
             page === currentPage
               ? "bg-blue-600 text-white border-blue-600"
               : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
@@ -64,7 +64,7 @@ const Pagination: React.FC<PaginationProps> = ({
         onClick={() => handleClick(currentPage + 1)}
         disabled={currentPage === totalPages}
         aria-label="Next page"
-        className={`px-3 py-1 rounded-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed`}
+        className={`px-3 py-1 rounded-full border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed`}
       >
         <ChevronRightIcon className="inline-block w-4 h-4" />
       </button>
